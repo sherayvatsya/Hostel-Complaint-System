@@ -5,41 +5,63 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: light dark;
+  }
+
   body {
     font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-    @apply transition-colors duration-300 overflow-x-hidden;
+    @apply transition-colors duration-300 overflow-x-hidden bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-primary-500/80 text-white;
+  }
+
+  .dark ::selection {
+    @apply bg-cyan-400/70 text-slate-950;
+  }
+
+  ::-moz-selection {
+    @apply bg-primary-500/80 text-white;
+  }
+
+  .dark ::-moz-selection {
+    @apply bg-cyan-400/70 text-slate-950;
   }
 }
 
 /* Glassmorphism Styles */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(16px) saturate(120%);
   -webkit-backdrop-filter: blur(16px) saturate(120%);
   border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .dark .glass-panel {
-  background: rgba(15, 23, 42, 0.45);
+  background: rgba(15, 23, 42, 0.78);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+  box-shadow: 0 10px 30px 0 rgba(15, 23, 42, 0.08);
 }
 
 .dark .glass-card {
-  background: rgba(30, 41, 59, 0.35);
+  background: rgba(15, 23, 42, 0.72);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 34px 0 rgba(2, 8, 23, 0.3);
 }
 
 .glass-card-solid {

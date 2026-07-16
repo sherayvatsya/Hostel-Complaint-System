@@ -45,6 +45,8 @@ const AdminDashboard = () => {
     name: '',
     email: '',
     password: '',
+    securityQuestion: 'What city were you born in?',
+    securityAnswer: '',
     phone: '',
     roomNumber: '',
     hostelBlock: 'A Block',
@@ -120,9 +122,9 @@ const AdminDashboard = () => {
 
   const handleCreateUserSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, password, phone, roomNumber, hostelBlock } = newUserData;
+    const { name, email, password, securityQuestion, securityAnswer, phone, roomNumber, hostelBlock } = newUserData;
 
-    if (!name || !email || !password || !phone || !roomNumber || !hostelBlock) {
+    if (!name || !email || !password || !securityQuestion || !securityAnswer || !phone || !roomNumber || !hostelBlock) {
       return toast.error('Please fill in all fields for the new student account');
     }
 
@@ -562,6 +564,26 @@ const AdminDashboard = () => {
                       value={newUserData.password}
                       onChange={handleNewUserChange}
                       placeholder="Password"
+                      className="glass-input w-full py-2.5 px-3 rounded-xl text-sm text-slate-800 dark:text-white outline-none"
+                    />
+                    <select
+                      name="securityQuestion"
+                      value={newUserData.securityQuestion}
+                      onChange={handleNewUserChange}
+                      className="glass-input w-full py-2.5 px-3 rounded-xl text-sm text-slate-800 dark:text-white outline-none appearance-none"
+                    >
+                      <option value="What city were you born in?">What city were you born in?</option>
+                      <option value="What was the name of your first school?">What was the name of your first school?</option>
+                      <option value="What is your mother’s maiden name?">What is your mother’s maiden name?</option>
+                      <option value="What was your first pet’s name?">What was your first pet’s name?</option>
+                      <option value="What is your favorite teacher’s name?">What is your favorite teacher’s name?</option>
+                    </select>
+                    <input
+                      type="text"
+                      name="securityAnswer"
+                      value={newUserData.securityAnswer}
+                      onChange={handleNewUserChange}
+                      placeholder="Security answer"
                       className="glass-input w-full py-2.5 px-3 rounded-xl text-sm text-slate-800 dark:text-white outline-none"
                     />
                     <input

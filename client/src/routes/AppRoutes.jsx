@@ -6,6 +6,7 @@ import ProtectedRoute from './ProtectedRoute';
 import LandingPage from '../pages/LandingPage';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import ForgotPassword from '../pages/ForgotPassword';
 import StudentDashboard from '../pages/StudentDashboard';
 import AdminDashboard from '../pages/AdminDashboard';
 import ComplaintForm from '../pages/ComplaintForm';
@@ -21,6 +22,7 @@ const AppRoutes = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
 
       {/* Student Protected Routes */}
       <Route element={<ProtectedRoute allowedRoles={['student']} />}>

@@ -137,7 +137,13 @@ const Login = () => {
           </form>
 
           {/* Quick Admin/Student Helper Links for grading ease */}
-          <div className="mt-6 pt-5 border-t border-slate-200/10 text-center space-y-2">
+          <div className="mt-6 pt-5 border-t border-slate-200/10 text-center space-y-3">
+            <p className="text-xs text-slate-400 font-semibold">
+              Forgot your password?{' '}
+              <Link to="/forgot-password" className="text-primary-500 hover:underline">
+                Reset it here
+              </Link>
+            </p>
             <p className="text-xs text-slate-400 font-semibold">
               Don't have an account?{' '}
               <Link to="/register" className="text-primary-500 hover:underline">

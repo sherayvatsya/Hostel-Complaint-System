@@ -22,6 +22,15 @@ const UserSchema = new mongoose.Schema(
       minlength: [6, 'Password must be at least 6 characters'],
       select: false
     },
+    securityQuestion: {
+      type: String,
+      required: [true, 'Please select a security question']
+    },
+    securityAnswer: {
+      type: String,
+      required: [true, 'Please provide a security answer'],
+      select: false
+    },
     roomNumber: {
       type: String,
       required: function() { return this.role === 'student'; },
@@ -45,11 +54,6 @@ const UserSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default: ''
-    },
-    role: {
-      type: String,
-      enum: ['student', 'admin'],
-      default: 'student'
     }
   },
   {
@@ -57,18 +61,33 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-// Hash password before saving
+// Hash password and security answer before saving
 UserSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) {
-    next();
+  if (!this.isModified('password') && !this.isModified('securityAnswer')) {
+    return next();
   }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+
+  if (this.isModified('password')) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+
+  if (this.isModified('securityAnswer')) {
+    const salt = await bcrypt.genSalt(10);
+    this.securityAnswer = await bcrypt.hash(this.securityAnswer, salt);
+  }
+
+  next();
 });
 
 // Compare password method
 UserSchema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// Compare security answer method
+UserSchema.methods.matchSecurityAnswer = async function(enteredAnswer) {
+  return await bcrypt.compare(enteredAnswer, this.securityAnswer);
 };
 
 module.exports = mongoose.model('User', UserSchema);

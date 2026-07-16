@@ -168,10 +168,10 @@ const updateComplaintStatus = async (req, res) => {
 // @access  Private (Admin only)
 const createUser = async (req, res) => {
   try {
-    const { name, email, password, phone, roomNumber, hostelBlock, avatar, role } = req.body;
+    const { name, email, password, securityQuestion, securityAnswer, phone, roomNumber, hostelBlock, avatar, role } = req.body;
 
-    if (!name || !email || !password || !phone) {
-      return res.status(400).json({ success: false, message: 'Name, email, password, and phone are required' });
+    if (!name || !email || !password || !phone || !securityQuestion || !securityAnswer) {
+      return res.status(400).json({ success: false, message: 'Name, email, password, phone, security question, and answer are required' });
     }
 
     const userExists = await User.findOne({ email });
@@ -183,6 +183,8 @@ const createUser = async (req, res) => {
       name,
       email,
       password,
+      securityQuestion,
+      securityAnswer,
       phone,
       roomNumber: role === 'admin' ? undefined : roomNumber,
       hostelBlock: role === 'admin' ? undefined : hostelBlock,

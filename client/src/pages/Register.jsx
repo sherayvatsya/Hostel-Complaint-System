@@ -14,6 +14,9 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
+    securityQuestion: 'What city were you born in?',
+    securityAnswer: '',
     phone: '',
     roomNumber: '',
     hostelBlock: 'A Block',
@@ -39,12 +42,20 @@ const Register = () => {
     setFormData({ ...formData, avatar: url });
   };
 
+  const securityQuestions = [
+    'What city were you born in?',
+    'What was the name of your first school?',
+    'What is your mother’s maiden name?',
+    'What was your first pet’s name?',
+    'What is your favorite teacher’s name?'
+  ];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { name, email, password, phone, roomNumber, hostelBlock } = formData;
+    const { name, email, password, confirmPassword, securityQuestion, securityAnswer, phone, roomNumber, hostelBlock } = formData;
 
-    if (!name || !email || !password || !phone || !roomNumber || !hostelBlock) {
+    if (!name || !email || !password || !confirmPassword || !securityQuestion || !securityAnswer || !phone || !roomNumber || !hostelBlock) {
       return toast.error('Please fill in all required fields');
     }
 
@@ -52,11 +63,16 @@ const Register = () => {
       return toast.error('Password must be at least 6 characters long');
     }
 
+    if (password !== confirmPassword) {
+      return toast.error('Passwords do not match');
+    }
+
     setLoading(true);
     const toastId = toast.loading('Registering student account...');
 
     try {
-      const res = await register(formData);
+      const { confirmPassword, ...registerPayload } = formData;
+      const res = await register(registerPayload);
       if (res.success) {
         toast.success('Registration successful! Welcome.', { id: toastId });
         navigate('/dashboard');
@@ -160,6 +176,64 @@ const Register = () => {
                 </div>
               </div>
 
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <FiLock className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Repeat your password"
+                    className="glass-input block w-full pl-10 pr-4 py-2.5 text-sm rounded-xl text-slate-800 dark:text-white outline-none"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Security Question
+                </label>
+                <select
+                  name="securityQuestion"
+                  value={formData.securityQuestion}
+                  onChange={handleChange}
+                  className="glass-input block w-full pl-3 pr-4 py-2.5 text-sm rounded-xl text-slate-800 dark:text-white appearance-none outline-none"
+                  required
+                >
+                  {securityQuestions.map((question, idx) => (
+                    <option key={idx} value={question}>
+                      {question}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Security Answer
+                </label>
+                <input
+                  type="text"
+                  name="securityAnswer"
+                  value={formData.securityAnswer}
+                  onChange={handleChange}
+                  placeholder="Enter your answer"
+                  className="glass-input block w-full pl-3 pr-4 py-2.5 text-sm rounded-xl text-slate-800 dark:text-white outline-none"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Phone Number

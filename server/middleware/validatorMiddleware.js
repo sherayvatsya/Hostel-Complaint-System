@@ -17,6 +17,8 @@ const validateRegister = [
   body('name').trim().notEmpty().withMessage('Name is required'),
   body('email').isEmail().withMessage('Please provide a valid email'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+  body('securityQuestion').trim().notEmpty().withMessage('Security question is required'),
+  body('securityAnswer').trim().notEmpty().withMessage('Security answer is required'),
   body('phone').trim().notEmpty().withMessage('Phone number is required'),
   body('roomNumber').trim().custom((value, { req }) => {
     if (req.body.role !== 'admin' && !value) {
@@ -40,6 +42,14 @@ const validateLogin = [
   validateResults
 ];
 
+// Validate forgot password
+const validateForgotPassword = [
+  body('email').isEmail().withMessage('Please provide a valid email'),
+  body('securityAnswer').trim().notEmpty().withMessage('Security answer is required'),
+  body('newPassword').isLength({ min: 6 }).withMessage('New password must be at least 6 characters long'),
+  validateResults
+];
+
 // Validate complaint creation
 const validateComplaint = [
   body('title').trim().notEmpty().withMessage('Complaint title is required'),
@@ -56,5 +66,6 @@ const validateComplaint = [
 module.exports = {
   validateRegister,
   validateLogin,
+  validateForgotPassword,
   validateComplaint
 };

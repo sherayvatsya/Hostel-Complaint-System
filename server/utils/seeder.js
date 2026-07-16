@@ -22,6 +22,8 @@ const seedData = async () => {
       name: 'Hostel Chief Warden',
       email: 'admin@hostel.com',
       password: 'admin123', // Will be hashed by User pre-save middleware
+      securityQuestion: 'What city were you born in?',
+      securityAnswer: 'Mumbai',
       phone: '+19876543210',
       avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&h=150&q=80',
       role: 'admin'
@@ -32,6 +34,8 @@ const seedData = async () => {
       name: 'Aravind Swamy',
       email: 'student@hostel.com',
       password: 'student123', // Will be hashed
+      securityQuestion: 'What was the name of your first school?',
+      securityAnswer: 'Kendriya Vidyalaya',
       roomNumber: '204-B',
       hostelBlock: 'C Block',
       phone: '+919988776655',

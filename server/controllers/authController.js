@@ -13,7 +13,7 @@ const generateToken = (id) => {
 // @access  Public
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, roomNumber, hostelBlock, phone, avatar } = req.body;
+        const { name, email, password, roomNumber, hostelBlock, phone, avatar, securityQuestion, securityAnswer } = req.body;
 
     // Check if user already exists
     const userExists = await User.findOne({ email });
@@ -26,6 +26,8 @@ const registerUser = async (req, res) => {
       name,
       email,
       password,
+      securityQuestion,
+      securityAnswer,
       roomNumber,
       hostelBlock,
       phone,
@@ -90,6 +92,54 @@ const loginUser = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Server error during login' });
+  }
+};
+
+// @desc    Get security question for forgot password
+// @route   GET /api/auth/forgot-password/question
+// @access  Public
+const getForgotPasswordQuestion = async (req, res) => {
+  try {
+    const { email } = req.query;
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    res.json({ success: true, securityQuestion: user.securityQuestion });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error retrieving security question' });
+  }
+};
+
+// @desc    Reset forgotten password
+// @route   POST /api/auth/forgot-password
+// @access  Public
+const forgotPassword = async (req, res) => {
+  try {
+    const { email, securityAnswer, newPassword } = req.body;
+
+    if (!email || !securityAnswer || !newPassword) {
+      return res.status(400).json({ success: false, message: 'Please provide email, security answer, and new password' });
+    }
+
+    const user = await User.findOne({ email }).select('+securityAnswer +password');
+    if (!user || !(await user.matchSecurityAnswer(securityAnswer))) {
+      return res.status(401).json({ success: false, message: 'Invalid security answer or email' });
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    res.json({ success: true, message: 'Password reset successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error resetting password' });
   }
 };
 
@@ -193,6 +243,8 @@ const changePassword = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  getForgotPasswordQuestion,
+  forgotPassword,
   getUserProfile,
   updateUserProfile,
   changePassword

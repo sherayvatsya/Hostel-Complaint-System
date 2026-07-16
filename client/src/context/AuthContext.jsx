@@ -118,6 +118,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const fetchSecurityQuestion = async (email) => {
+    try {
+      const res = await api.get('/auth/forgot-password/question', { params: { email } });
+      if (res.data.success) {
+        return { success: true, securityQuestion: res.data.securityQuestion };
+      }
+      return { success: false, message: res.data.message || 'Unable to fetch security question' };
+    } catch (error) {
+      return { success: false, message: error.response?.data?.message || 'Unable to fetch security question' };
+    }
+  };
+
+  const resetPassword = async (payload) => {
+    try {
+      const res = await api.post('/auth/forgot-password', payload);
+      if (res.data.success) {
+        return { success: true, message: res.data.message };
+      }
+      return { success: false, message: res.data.message || 'Password reset failed' };
+    } catch (error) {
+      return { success: false, message: error.response?.data?.message || 'Password reset failed' };
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -127,7 +151,9 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         updateProfile,
-        changePassword
+        changePassword,
+        fetchSecurityQuestion,
+        resetPassword
       }}
     >
       {children}

@@ -15,6 +15,8 @@ const SEED_USERS = [
     name: 'Aravind Swamy',
     email: 'mockstudent@example.com',
     password: 'password123',
+    securityQuestion: 'What city were you born in?',
+    securityAnswer: 'Mumbai',
     roomNumber: '204-B',
     hostelBlock: 'C Block',
     phone: '+919988776655',
@@ -26,6 +28,8 @@ const SEED_USERS = [
     name: 'Hostel Chief Warden',
     email: 'mockadmin@example.com',
     password: 'password123',
+    securityQuestion: 'What was the name of your first school?',
+    securityAnswer: 'Kendriya Vidyalaya',
     phone: '+19876543210',
     avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&h=150&q=80',
     role: 'admin'
@@ -187,7 +191,7 @@ const executeMockRequest = async (method, url, data = null, config = {}) => {
   }
 
   if (url === '/auth/register') {
-    const { name, email, password, phone, roomNumber, hostelBlock, avatar } = data;
+    const { name, email, password, securityQuestion, securityAnswer, phone, roomNumber, hostelBlock, avatar } = data;
     const users = getLocalData('hc_users');
     if (users.find(u => u.email === email)) {
       return mockError('User already exists');
@@ -197,6 +201,8 @@ const executeMockRequest = async (method, url, data = null, config = {}) => {
       name,
       email,
       password,
+      securityQuestion,
+      securityAnswer,
       phone,
       roomNumber,
       hostelBlock,
@@ -207,6 +213,29 @@ const executeMockRequest = async (method, url, data = null, config = {}) => {
     setLocalData('hc_users', users);
     localStorage.setItem('token', newUser._id);
     return mockResponse({ token: newUser._id, user: newUser });
+  }
+
+  if (url === '/auth/forgot-password/question') {
+    const params = config.params || {};
+    const { email } = params;
+    const users = getLocalData('hc_users');
+    const user = users.find(u => u.email === email);
+    if (!user) {
+      return mockError('User not found', 404);
+    }
+    return mockResponse({ securityQuestion: user.securityQuestion });
+  }
+
+  if (url === '/auth/forgot-password') {
+    const { email, securityAnswer, newPassword } = data;
+    const users = getLocalData('hc_users');
+    const idx = users.findIndex(u => u.email === email);
+    if (idx === -1 || users[idx].securityAnswer !== securityAnswer) {
+      return mockError('Invalid security answer or email', 401);
+    }
+    users[idx].password = newPassword;
+    setLocalData('hc_users', users);
+    return mockResponse({ message: 'Password reset successfully' });
   }
 
   const currentUser = getActiveUser();

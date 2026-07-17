@@ -1,6 +1,9 @@
-require('dotenv').config();
-const connectDB = require('./config/db');
-const User = require('./models/User');
+require("dotenv").config();
+
+
+
+const connectDB = require("./config/db");
+const User = require("./models/User");
 
 const seedAdmin = async () => {
   try {

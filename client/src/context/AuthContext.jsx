@@ -3,6 +3,15 @@ import api from '../services/api';
 
 const AuthContext = createContext();
 
+const getApiErrorMessage = (error, fallback) => {
+  const data = error.response?.data;
+  if (data?.message) return data.message;
+  if (Array.isArray(data?.errors) && data.errors.length > 0) {
+    return data.errors.map((err) => err.message).join(', ');
+  }
+  return fallback;
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -50,7 +59,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        message: error.response?.data?.message || 'Registration failed'
+        message: getApiErrorMessage(error, 'Registration failed')
       };
     } finally {
       setLoading(false);
@@ -74,7 +83,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        message: error.response?.data?.message || 'Invalid email or password'
+        message: getApiErrorMessage(error, 'Invalid email or password')
       };
     } finally {
       setLoading(false);
@@ -98,7 +107,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        message: error.response?.data?.message || 'Failed to update profile'
+        message: getApiErrorMessage(error, 'Failed to update profile')
       };
     }
   };
@@ -113,7 +122,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        message: error.response?.data?.message || 'Failed to change password'
+        message: getApiErrorMessage(error, 'Failed to change password')
       };
     }
   };
@@ -126,7 +135,7 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, message: res.data.message || 'Unable to fetch security question' };
     } catch (error) {
-      return { success: false, message: error.response?.data?.message || 'Unable to fetch security question' };
+      return { success: false, message: getApiErrorMessage(error, 'Unable to fetch security question') };
     }
   };
 
@@ -138,7 +147,7 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, message: res.data.message || 'Password reset failed' };
     } catch (error) {
-      return { success: false, message: error.response?.data?.message || 'Password reset failed' };
+      return { success: false, message: getApiErrorMessage(error, 'Password reset failed') };
     }
   };
 

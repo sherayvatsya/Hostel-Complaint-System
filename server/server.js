@@ -2,6 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const dns = require("dns");
+
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 const connectDB = require('./config/db');
 
 // Route Imports
@@ -9,6 +12,8 @@ const authRoutes = require('./routes/authRoutes');
 const complaintRoutes = require('./routes/complaintRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+
+
 
 // Initialize database
 connectDB();

@@ -51,16 +51,10 @@ Hostel Complaint Management System/
 └── README.md
 ```
 
-## Screenshots
-Add screenshots here:
-
-| Landing Page | Student Dashboard | Admin Dashboard |
-| --- | --- | --- |
-| `<Add Screenshot>` | `<Add Screenshot>` | `<Add Screenshot>` |
-
 ## Live Demo
-- Frontend: `<Add Frontend URL>`
-- Backend API: `<Add Backend URL>`
+- Frontend: 
+hostel-complaint-system-amber.vercel.app
+- Backend API: https://hostel-complaint-system-viws.onrender.com
 
 ## Installation
 

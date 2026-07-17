@@ -53,7 +53,7 @@ Hostel Complaint Management System/
 
 ## Live Demo
 - Frontend: 
-hostel-complaint-system-amber.vercel.app
+https://hostel-complaint-system-amber.vercel.app/
 - Backend API: https://hostel-complaint-system-viws.onrender.com
 
 ## Installation
